@@ -15,7 +15,10 @@ Then:
 first time only.
 
     npm run build
-    npm run start 
+    
+then
+
+    npm run start
 
 I wrote some tests TDD-wise that you can analyze with the command:
  
