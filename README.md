@@ -1,5 +1,5 @@
 # Greentech technical review
-
+The project uses Node 21.1 and TypeScript.
 Simple guidelines to start the project:
 
  ## Install 
