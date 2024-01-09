@@ -8,13 +8,14 @@ import HeadachePills from '../src/goods/HeadachePills';
 import MusicCd from '../src/goods/MusicCd';
 
 
-function getRandomPrice(max: number): number {
-  const random = Math.floor(Math.random() * max);
-  return Math.round((random + Number.EPSILON) * 100) / 100;
-}
-
 describe('calculate taxes on products', () => {
+  function getRandomPrice(max: number): number {
+    const random = Math.random() * max;
+    const result = Math.round((random + Number.EPSILON) * 100.0) / 100.0;
+    return result
+  }
   const taxCollector = new TaxCollector();
+
   it('Given the first basket in the description, then the tax amount must be 1,50 and total must be 42,32', () => {
     taxCollector.clear();
     const book = new Book(2, false, 12.49);
@@ -64,13 +65,94 @@ describe('calculate taxes on products', () => {
     expect(taxCollector.getTaxAmount()).toBe(0);
 
   });
-  it('Given an imported Food type trade good of any price the sales taxes must be the 5% of the price, so 0.5', () => {
+
+  it('Given an imported Food type trade good of any price the sales taxes must be the 5% of the price ', () => {
     taxCollector.clear();
     const price = getRandomPrice(100);
     const boxChocolates = new TradeGood(GoodType.Food, 1, true, price);
     taxCollector.add(boxChocolates);
 
     expect(taxCollector.getTaxAmount()).toBeCloseTo(price * 0.05, 1);
+
+  });
+
+  it('Given a Medical type trade good of any price the sales taxes must be 0', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const headachePills = new TradeGood(GoodType.Medical, 1, false, price);
+    taxCollector.add(headachePills);
+
+    expect(taxCollector.getTaxAmount()).toBe(0);
+
+  });
+
+  it('Given an imported Medical type trade good of any price the sales taxes must be the 5% of the price ', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const headachePills = new TradeGood(GoodType.Medical, 1, true, price);
+    taxCollector.add(headachePills);
+
+    expect(taxCollector.getTaxAmount()).toBeCloseTo(price * 0.05, 1);
+
+  });
+
+  it('Given a Book type trade good of any price the sales taxes must be 0', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const book = new TradeGood(GoodType.Book, 1, false, price);
+    taxCollector.add(book);
+
+    expect(taxCollector.getTaxAmount()).toBe(0);
+
+  });
+
+  it('Given an imported Book type trade good of any price the sales taxes must be the 5% of the price ', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const book = new TradeGood(GoodType.Book, 1, true, price);
+    taxCollector.add(book);
+
+    expect(taxCollector.getTaxAmount()).toBeCloseTo(price * 0.05, 1);
+
+  });
+
+  it('Given an Other type trade good of any price the sales taxes must be 10% of the price', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const otherItem = new TradeGood(GoodType.Other, 1, false, price);
+    taxCollector.add(otherItem);
+
+    expect(taxCollector.getTaxAmount()).toBeCloseTo(price * 0.10, 1);
+
+  });
+
+  it('Given an imported Other type trade good of any price the sales taxes must be the 15% of the price ', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const otherItem = new TradeGood(GoodType.Other, 1, true, price);
+    taxCollector.add(otherItem);
+
+    expect(taxCollector.getTaxAmount()).toBeCloseTo(price * 0.15, 1);
+
+  });
+
+  it('Given an Item with a price of 27,99 sales tax must be 4,20', () => {
+    taxCollector.clear();
+    const price = 27.99;
+    const otherItem = new TradeGood(GoodType.Other, 1, true, price);
+    taxCollector.add(otherItem);
+
+    expect(taxCollector.getTaxAmount()).toBe(4.20);
+
+  });
+
+  it('Given an Item, sales tax must be a multiple of 0.05', () => {
+    taxCollector.clear();
+    const price = getRandomPrice(100);
+    const otherItem = new TradeGood(GoodType.Other, 1, true, price);
+    taxCollector.add(otherItem);
+
+    expect((taxCollector.getTaxAmount() * 100) % 5).toBe(0);
 
   });
 });
