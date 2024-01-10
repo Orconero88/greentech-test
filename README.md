@@ -7,7 +7,7 @@ Simple guidelines to start the project:
 
 To run the project start by cloning the repository (greentech-test).
 				
-	git clone https://github.com/Orconero88/greentech-test-sales.git
+	git clone https://github.com/davidechieli/greentech-test-sales.git
 
 then enter in the project root directory:
 
